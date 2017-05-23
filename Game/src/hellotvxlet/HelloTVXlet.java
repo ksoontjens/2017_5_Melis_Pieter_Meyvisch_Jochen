@@ -36,6 +36,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     HTextButton knop3;
     HTextButton knop4;
     HScene scene;
+    int toestand=0;
+    ArrayList userList=new ArrayList();
     
     public HelloTVXlet() {
         
@@ -45,22 +47,22 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         
         scene=HSceneFactory.getInstance().getDefaultHScene();
         
-        knop1=new HTextButton("knop1",300,100,100,100);
+        knop1=new HTextButton("rood",300,100,100,100);
         knop1.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop1.setBackground(Color.RED);
         scene.add(knop1);
         
-        knop2=new HTextButton("knop2",200,200,100,100);
+        knop2=new HTextButton("blauw",200,200,100,100);
         knop2.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop2.setBackground(Color.BLUE);
         scene.add(knop2);
         
-        knop3=new HTextButton("knop3",300,300,100,100);
+        knop3=new HTextButton("groen",300,300,100,100);
         knop3.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop3.setBackground(Color.GREEN);
         scene.add(knop3);
         
-        knop4=new HTextButton("knop4",400,200,100,100);
+        knop4=new HTextButton("geel",400,200,100,100);
         knop4.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop4.setBackground(Color.YELLOW);
         scene.add(knop4);
@@ -70,10 +72,10 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         knop3.setFocusTraversal(knop4, knop2, null, knop1);
         knop4.setFocusTraversal(null, knop2, knop3, knop1);
         
-        knop1.setActionCommand("knop1a");
-        knop2.setActionCommand("knop2a");
-        knop3.setActionCommand("knop3a");
-        knop4.setActionCommand("knop4a");
+        knop1.setActionCommand("1");
+        knop2.setActionCommand("2");
+        knop3.setActionCommand("3");
+        knop4.setActionCommand("4");
 
         knop1.addHActionListener(this);
         knop2.addHActionListener(this);
@@ -85,6 +87,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         
         
         scene.validate(); scene.setVisible(true);
+        toestand=State.COMPUTERDISPLAY;
     }   
 
 
@@ -101,7 +104,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     repository.addKey(org.havi.ui.event.HRcEvent.VK_DOWN);
     repository.addKey(org.havi.ui.event.HRcEvent.VK_LEFT);
     // Bekend maken b i j EventManager
-    manager.addUserEventListener(this, repository);
+    // niet nodig:
+  //  manager.addUserEventListener(this, repository);
         
      for (int i=0; i<=10; i++)
         {
@@ -116,17 +120,33 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     
     public void callback()
     {
-        if (running)
+        if (!running) return; // einde functie
+        int vtoestand=toestand; // volgende toestand
+        switch (toestand)
         {
-        display++;
-        int r=((Integer)lijst.get(display)).intValue();
-        System.out.println("index="+display+" waarde="+r);
-        if (r==1) knop1.requestFocus();
-        if (r==2) knop2.requestFocus();
-        if (r==3) knop3.requestFocus();
-        if (r==4) knop4.requestFocus();
-       // scene.repaint();
+            case State.COMPUTERDISPLAY:
+                    int r=((Integer)lijst.get(display)).intValue();
+                    System.out.println("index="+display+" waarde="+r);
+                    if (r==1) knop1.requestFocus();
+                    if (r==2) knop2.requestFocus();
+                    if (r==3) knop3.requestFocus();
+                    if (r==4) knop4.requestFocus();
+                   // scene.repaint();
+                   display++;
+                       if (display==lijst.size())
+                    {
+                        System.out.println("EINDE LIJST BEREIKT");
+                        vtoestand=State.USERPLAY;
+                    }
+                break;
+                
+            case State.USERPLAY:
+                
+                break;
+                
         }
+        toestand=vtoestand;
+ 
     }
     public void pauseXlet() {
     }
@@ -135,7 +155,27 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     }
 
     public void actionPerformed(ActionEvent arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        userList.add(arg0.getActionCommand());
+        if (userList.size()==lijst.size())
+        {
+        System.out.println("Controleer of alles klopt");
+        boolean allesklopt=true;
+        for (int i=0;i<lijst.size();i++)
+        {
+            System.out.print((Integer)lijst.get(i));
+            System.out.print("=?=");
+            System.out.println((String)userList.get(i));
+            int user=Integer.parseInt((String)userList.get(i));
+            
+            if (   ((Integer)lijst.get(i)).intValue()
+                    !=user )
+            {
+                allesklopt=false;
+            }
+        }
+        
+    }
     }
     public void addRandom(){
             randomGetal = min + (int)(Math.random() * max);
