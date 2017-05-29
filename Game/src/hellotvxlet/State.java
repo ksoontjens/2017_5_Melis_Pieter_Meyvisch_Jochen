@@ -12,4 +12,5 @@ package hellotvxlet;
 public class State {
 public static final int COMPUTERDISPLAY=1;
 public static final int USERPLAY=2;
+
 }
