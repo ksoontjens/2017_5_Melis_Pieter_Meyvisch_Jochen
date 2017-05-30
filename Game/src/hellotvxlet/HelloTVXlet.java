@@ -2,19 +2,16 @@ package hellotvxlet;
 
 import javax.tv.xlet.*;
 import java.awt.event.*;
+import org.dvb.event.UserEvent;
 import org.havi.ui.event.*;
-import org.dvb.ui.*;
-import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import org.havi.ui.HScene;
 import org.havi.ui.HSceneFactory;
-import org.havi.ui.HStaticText;
 import org.havi.ui.HTextButton;
 import org.havi.ui.HVisible;
 import org.havi.ui.event.HActionListener;
-import java.util.Random;
 import java.util.Timer;
 import org.dvb.event.EventManager;
 import org.dvb.event.UserEventListener;
@@ -38,6 +35,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     HScene scene;
     int toestand=0;
     ArrayList userList=new ArrayList();
+    private UserEvent e;
     
     public HelloTVXlet() {
         
@@ -47,30 +45,30 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         
         scene=HSceneFactory.getInstance().getDefaultHScene();
         
-        knop1=new HTextButton("rood",300,100,100,100);
+        knop1=new HTextButton("rood",250,0,200,200);
         knop1.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop1.setBackground(Color.RED);
         scene.add(knop1);
         
-        knop2=new HTextButton("blauw",200,200,100,100);
+        knop2=new HTextButton("blauw",50,200,200,200);
         knop2.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop2.setBackground(Color.BLUE);
         scene.add(knop2);
         
-        knop3=new HTextButton("groen",300,300,100,100);
+        knop3=new HTextButton("groen",250,400,200,200);
         knop3.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop3.setBackground(Color.GREEN);
         scene.add(knop3);
         
-        knop4=new HTextButton("geel",400,200,100,100);
+        knop4=new HTextButton("geel",450,200,200,200);
         knop4.setBackgroundMode(HVisible.BACKGROUND_FILL);
         knop4.setBackground(Color.YELLOW);
         scene.add(knop4);
         
-        knop1.setFocusTraversal(knop4, knop2, knop3, null);
-        knop2.setFocusTraversal(knop4, null, knop3, knop1);
-        knop3.setFocusTraversal(knop4, knop2, null, knop1);
-        knop4.setFocusTraversal(null, knop2, knop3, knop1);
+        knop1.setFocusTraversal(null, knop3, knop2,knop4 );
+        knop2.setFocusTraversal(knop1, knop3, null, knop4);
+        knop3.setFocusTraversal(knop1, null, knop2, knop4);
+        knop4.setFocusTraversal(knop1, knop3, knop2, null);
         
         knop1.setActionCommand("1");
         knop2.setActionCommand("2");
@@ -84,7 +82,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         
         knop1.requestFocus();
         
-        
+        scene.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        scene.setBackground(Color.BLACK);
         
         scene.validate(); scene.setVisible(true);
         toestand=State.COMPUTERDISPLAY;
@@ -131,6 +130,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                     if (r==2) knop2.requestFocus();
                     if (r==3) knop3.requestFocus();
                     if (r==4) knop4.requestFocus();
+                    
                    // scene.repaint();
                    display++;
                        if (display==lijst.size())
@@ -183,7 +183,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
             lijst.add(in);
             System.out.println(randomGetal);
     }
-        public void userEventReceived(org.dvb.event.UserEvent e) {
+    public void userEventReceived(org.dvb.event.UserEvent e) {
         if (e.getType() == KeyEvent.KEY_PRESSED) {
             System.out.println ( "Pushed Button" );
             switch( e.getCode ()) {
@@ -212,6 +212,10 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                     System.out.println(playerlijst);
                     break;
             }
+        }else{
+            
         }
     }
+
+
 }
