@@ -24,18 +24,19 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
      int max = 4;
      int min = 1;
      int  randomGetal;
-    ArrayList    lijst=new ArrayList();
-    ArrayList    playerlijst=new ArrayList();
+    ArrayList lijst = new ArrayList();
+    ArrayList playerlijst=new ArrayList();
     int display=0;
     boolean running=false;
     HTextButton knop1;
     HTextButton knop2;
     HTextButton knop3;
     HTextButton knop4;
+    HTextButton knop5;
+    HTextButton end;
     HScene scene;
     int toestand=0;
     ArrayList userList=new ArrayList();
-    private UserEvent e;
     
     public HelloTVXlet() {
         
@@ -65,6 +66,11 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         knop4.setBackground(Color.YELLOW);
         scene.add(knop4);
         
+        knop5=new HTextButton("",250,200,200,200);
+        knop5.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        knop5.setBackground(Color.BLACK);
+        scene.add(knop5);
+        
         knop1.setFocusTraversal(null, knop3, knop2,knop4 );
         knop2.setFocusTraversal(knop1, knop3, null, knop4);
         knop3.setFocusTraversal(knop1, null, knop2, knop4);
@@ -83,6 +89,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         knop1.requestFocus();
         
         
+        scene.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        scene.setBackground(Color.BLACK);
         
         scene.validate(); scene.setVisible(true);
         toestand=State.COMPUTERDISPLAY;
@@ -101,14 +109,10 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     repository.addKey(org.havi.ui.event.HRcEvent.VK_RIGHT);
     repository.addKey(org.havi.ui.event.HRcEvent.VK_DOWN);
     repository.addKey(org.havi.ui.event.HRcEvent.VK_LEFT);
-    // Bekend maken b i j EventManager
-    // niet nodig:
-  //  manager.addUserEventListener(this, repository);
+    
+    manager.addUserEventListener(this, repository);
         
-     for (int i=0; i<=10; i++)
-        {
-            addRandom();
-        }
+
      
      Timer t=new Timer();
      MijnTimerTask mtt=new MijnTimerTask(this);
@@ -123,6 +127,10 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         switch (toestand)
         {
             case State.COMPUTERDISPLAY:
+                
+                    
+                    addRandom();
+                    
                     int r=((Integer)lijst.get(display)).intValue();
                     System.out.println("index="+display+" waarde="+r);
                     if (r==1) knop1.requestFocus();
@@ -140,6 +148,41 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                 break;
                 
             case State.USERPLAY:
+                   
+                
+                
+                
+                if(lijst.size() == playerlijst.size()){
+                for (int i = 0; i < lijst.size(); i++) {
+                    for (int j = 0; j < playerlijst.size(); j++) {
+                        
+                      System.out.println(playerlijst.get(j));
+                      System.out.println(lijst.get(i));
+                      System.out.println("lijst = "+lijst);
+                      System.out.println("player = "+playerlijst);
+                  
+                  
+                    if(lijst.get(i).toString() == playerlijst.get(j).toString()){
+                        System.out.println("gelijk");
+                        knop5.setBackground(Color.GREEN); 
+                        playerlijst.clear();
+                        j=0;
+                        vtoestand=State.COMPUTERDISPLAY;
+                       
+                    }else{
+                          
+                        knop5.setBackground(Color.RED); 
+                        System.out.println("niet gelijk");  
+                        vtoestand=State.USERPLAY;
+
+                    }
+                   }
+                }
+                }
+                
+                
+                   
+                
                 
                 break;
                 
@@ -155,8 +198,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
 
     public void actionPerformed(ActionEvent arg0) {
         
-        userList.add(arg0.getActionCommand());
-        if (userList.size()==lijst.size())
+        playerlijst.add(arg0.getActionCommand());
+        if (playerlijst.size()==lijst.size())
         {
         System.out.println("Controleer of alles klopt");
         boolean allesklopt=true;
@@ -164,8 +207,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         {
             System.out.print((Integer)lijst.get(i));
             System.out.print("=?=");
-            System.out.println((String)userList.get(i));
-            int user=Integer.parseInt((String)userList.get(i));
+            System.out.println((String)playerlijst.get(i));
+            int user=Integer.parseInt((String)playerlijst.get(i));
             
             if (   ((Integer)lijst.get(i)).intValue()
                     !=user )
@@ -211,8 +254,6 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                     System.out.println(playerlijst);
                     break;
             }
-        }else{
-            
         }
     }
 
