@@ -35,6 +35,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     HTextButton knop5;
     HTextButton end;
     HScene scene;
+    HScene scene2;
     int toestand=0;
     ArrayList userList=new ArrayList();
     
@@ -113,6 +114,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     manager.addUserEventListener(this, repository);
         
 
+
      
      Timer t=new Timer();
      MijnTimerTask mtt=new MijnTimerTask(this);
@@ -128,8 +130,8 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         {
             case State.COMPUTERDISPLAY:
                 
-                    
                     addRandom();
+                    
                     
                     int r=((Integer)lijst.get(display)).intValue();
                     System.out.println("index="+display+" waarde="+r);
@@ -150,8 +152,6 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
             case State.USERPLAY:
                    
                 
-                
-                
                 if(lijst.size() == playerlijst.size()){
                 for (int i = 0; i < lijst.size(); i++) {
                     for (int j = 0; j < playerlijst.size(); j++) {
@@ -166,24 +166,20 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                         System.out.println("gelijk");
                         knop5.setBackground(Color.GREEN); 
                         playerlijst.clear();
-                        j=0;
                         vtoestand=State.COMPUTERDISPLAY;
                        
                     }else{
                           
                         knop5.setBackground(Color.RED); 
                         System.out.println("niet gelijk");  
-                        vtoestand=State.USERPLAY;
+                        scene.setBackgroundMode(HVisible.BACKGROUND_FILL);
+                        scene.setBackground(Color.RED);
+                        break;
 
                     }
                    }
                 }
                 }
-                
-                
-                   
-                
-                
                 break;
                 
         }
