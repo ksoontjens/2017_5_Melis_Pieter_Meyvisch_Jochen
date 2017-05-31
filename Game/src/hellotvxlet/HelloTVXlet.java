@@ -88,7 +88,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
         
         knop1.requestFocus();
         
-        
+
         scene.setBackgroundMode(HVisible.BACKGROUND_FILL);
         scene.setBackground(Color.BLACK);
         
