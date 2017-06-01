@@ -37,6 +37,9 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
     HScene scene;
     int toestand=0;
     ArrayList userList=new ArrayList();
+    String slijst = "";
+    String splayerlijst = "";
+    String[] colors = {"Rood","Blauw","Groen","Geel"};
     
     public HelloTVXlet() {
         
@@ -149,20 +152,48 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                 
             case State.USERPLAY:
                    
-                
-                
-                
                 if(lijst.size() == playerlijst.size()){
-                for (int i = 0; i < lijst.size(); i++) {
-                    for (int j = 0; j < playerlijst.size(); j++) {
+                
+                for (int i=0; i< lijst.size(); i++)
+                {
+                    slijst += lijst.get(i);
+                }
+                for (int i=0; i< playerlijst.size(); i++)
+                {
+                    splayerlijst += playerlijst.get(i);
+                }
+                
+                if (slijst.equals(splayerlijst))
+                {
+                    System.out.println("gelijk");
+                    knop5.setBackground(Color.GREEN); 
+                    playerlijst.clear();
+                    vtoestand=State.COMPUTERDISPLAY;
+                }
+                else
+                {
+                    knop5.setBackground(Color.RED); 
+                    System.out.println("niet gelijk");  
+                    vtoestand=State.USERPLAY;
+                }
+                
+                
+                    // VORIGE CODE //
+                    /*
+                    for (int i = 0; i < lijst.size(); i++) {
+                        for (int j = 0; j < playerlijst.size(); j++) {
+
+                          System.out.println(playerlijst.get(j));
+                          System.out.println(lijst.get(i));
+
+                          System.out.println("lijst = "+lijst);
+                          System.out.println("player = "+playerlijst);
                         
-                      System.out.println(playerlijst.get(j));
-                      System.out.println(lijst.get(i));
-                      System.out.println("lijst = "+lijst);
-                      System.out.println("player = "+playerlijst);
-                  
-                  
                     if(lijst.get(i).toString() == playerlijst.get(j).toString()){
+                        
+                        System.out.println("Print v lijst: " + lijst.get(i).toString());
+                        System.out.println("Print v playerlijst: " + playerlijst.get(j).toString());
+                        
                         System.out.println("gelijk");
                         knop5.setBackground(Color.GREEN); 
                         playerlijst.clear();
@@ -176,9 +207,12 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
                         vtoestand=State.USERPLAY;
 
                     }
+                    }
+                    }*/
+                     
                    }
-                }
-                }
+                
+                
                 
                 
                    
@@ -223,7 +257,7 @@ public class HelloTVXlet implements Xlet, HActionListener, UserEventListener {
             randomGetal = min + (int)(Math.random() * max);
             Integer in=new Integer(randomGetal);
             lijst.add(in);
-            System.out.println(randomGetal);
+            System.out.println(colors[randomGetal-1]); //Print de kleur ipv randomgetal
     }
     public void userEventReceived(org.dvb.event.UserEvent e) {
         if (e.getType() == KeyEvent.KEY_PRESSED) {
