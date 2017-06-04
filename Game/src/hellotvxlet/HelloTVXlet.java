@@ -34,12 +34,14 @@ public class HelloTVXlet implements Xlet, HActionListener {
     HTextButton knop3;
     HTextButton knop4;
     HTextButton knop5;
+    HTextButton knop6;
     HTextButton end;
     HScene scene;
     int toestand=0;
     ArrayList userList=new ArrayList();
     String slijst = "";
     String splayerlijst = "";
+    boolean restart = false;
     String[] colors = {"Rood","Blauw","Groen","Geel"};
     int startlen=3;
     DVBColor DARKRED=new DVBColor(150,0,0,255);
@@ -82,6 +84,15 @@ public class HelloTVXlet implements Xlet, HActionListener {
         knop5.setBackground(Color.BLACK);
         scene.add(knop5);
         
+        knop6=new HTextButton("",475,450,150,75);
+        knop6.setBackgroundMode(HVisible.BACKGROUND_FILL);
+        knop6.setBackground(Color.white);
+        knop6.setForeground(Color.BLACK);
+        scene.add(knop6);
+            knop6.setTextContent("Game Over!", HVisible.FOCUSED_STATE);
+        knop6.setVisible(false);
+        
+        
         knop1.setFocusTraversal(null, knop3, knop2,knop4 );
         knop2.setFocusTraversal(knop1, knop3, null, knop4);
         knop3.setFocusTraversal(knop1, null, knop2, knop4);
@@ -91,11 +102,13 @@ public class HelloTVXlet implements Xlet, HActionListener {
         knop2.setActionCommand("2");
         knop3.setActionCommand("3");
         knop4.setActionCommand("4");
+        knop6.setActionCommand("6");
 
         knop1.addHActionListener(this);
         knop2.addHActionListener(this);
         knop3.addHActionListener(this);
         knop4.addHActionListener(this);
+        knop6.addHActionListener(this);
         
         knop1.requestFocus();
         
@@ -185,32 +198,41 @@ public class HelloTVXlet implements Xlet, HActionListener {
                    
                 if(lijst.size() == playerlijst.size()){
                 
-                for (int i=0; i< lijst.size(); i++)
-                {
-                    slijst += lijst.get(i);
+                    for (int i=0; i< lijst.size(); i++)
+                    {
+                        slijst += lijst.get(i);
+                    }
+                    for (int i=0; i< playerlijst.size(); i++)
+                    {
+                        splayerlijst += playerlijst.get(i);
+                    }
+
+                    if (slijst.equals(splayerlijst))
+                    {
+                        System.out.println("gelijk");
+                        knop5.setBackground(Color.GREEN); 
+                        playerlijst.clear();
+
+                        addRandom();
+                        display=0;
+                        vtoestand=State.COMPUTERDISPLAY;
+                    }
+                    else
+                    {
+                        knop5.setBackground(Color.RED); 
+                        System.out.println("niet gelijk");  
+                        vtoestand=State.USERWAIT;
+                    }
                 }
-                for (int i=0; i< playerlijst.size(); i++)
-                {
-                    splayerlijst += playerlijst.get(i);
-                }
+                break;
+            
+            case State.USERWAIT:
+                System.out.println("Game over!");
+                knop6.setVisible(true);
+                knop6.requestFocus();
                 
-                if (slijst.equals(splayerlijst))
-                {
-                    System.out.println("gelijk");
-                    knop5.setBackground(Color.GREEN); 
-                    playerlijst.clear();
-                
-                    addRandom();
-                    display=0;
-                    vtoestand=State.COMPUTERDISPLAY;
-                }
-                else
-                {
-                    knop5.setBackground(Color.RED); 
-                    System.out.println("niet gelijk");  
-                    vtoestand=State.USERPLAY;
-                }
-               
+                break;
+              
                 
                     // VORIGE CODE //
                     /*
@@ -245,16 +267,7 @@ public class HelloTVXlet implements Xlet, HActionListener {
                     }*/
                      
                    }
-                
-                
-                
-                
-                   
-                
-                
-                break;
-                
-        }
+
         toestand=vtoestand;
  
     }
@@ -273,6 +286,23 @@ public class HelloTVXlet implements Xlet, HActionListener {
         if (arg0.getActionCommand().equals("1"))
         {
             knop1.setBackground(Color.RED);
+        }
+        if (arg0.getActionCommand().equals("2"))
+        {
+            knop2.setBackground(Color.BLUE);
+        }
+        if (arg0.getActionCommand().equals("3"))
+        {
+            knop3.setBackground(Color.GREEN);
+        }
+        if (arg0.getActionCommand().equals("4"))
+        {
+            knop4.setBackground(Color.YELLOW);
+        }
+        
+        if (arg0.getActionCommand().equals("6"))
+        {
+            restart = true;
         }
         
         scene.repaint();
